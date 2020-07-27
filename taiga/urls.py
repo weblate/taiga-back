@@ -30,8 +30,8 @@ from .routers import router
 ##############################################
 
 urlpatterns = [
-    path('api/v1/', include(router.urls)),
-    path('admin/', admin.site.urls),
+    path("api/v1/", include(router.urls)),
+    path("admin/", admin.site.urls),
 ]
 
 handler500 = "taiga.base.api.views.api_server_error"
@@ -82,3 +82,13 @@ if settings.DEBUG:
     # Hardcoded only for development server
     urlpatterns += staticfiles_urlpatterns(prefix="/static/")
     urlpatterns += mediafiles_urlpatterns(prefix="/media/")
+
+
+##############################################
+# Prometheus metrics
+##############################################
+
+if settings.PROMETHEUS_METRICS_URL:
+    urlpatterns += [
+        url("", include("django_prometheus.urls")),
+    ]

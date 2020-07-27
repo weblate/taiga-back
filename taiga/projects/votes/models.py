@@ -22,8 +22,10 @@ from django.contrib.contenttypes.fields import GenericForeignKey
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
+from django_prometheus.models import ExportModelOperationsMixin
 
-class Votes(models.Model):
+
+class Votes(ExportModelOperationsMixin("votes"), models.Model):
     content_type = models.ForeignKey("contenttypes.ContentType", on_delete=models.CASCADE)
     object_id = models.PositiveIntegerField()
     content_object = GenericForeignKey("content_type", "object_id")
@@ -44,7 +46,7 @@ class Votes(models.Model):
         return self.count
 
 
-class Vote(models.Model):
+class Vote(ExportModelOperationsMixin("vote"), models.Model):
     content_type = models.ForeignKey("contenttypes.ContentType", on_delete=models.CASCADE)
     object_id = models.PositiveIntegerField()
     content_object = GenericForeignKey("content_type", "object_id")

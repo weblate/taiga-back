@@ -23,6 +23,8 @@ from django.conf import settings
 from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
 
+from django_prometheus.models import ExportModelOperationsMixin
+
 from taiga.base.utils.time import timestamp_ms
 from taiga.projects.due_dates.models import DueDateMixin
 from taiga.projects.occ import OCCModelMixin
@@ -31,7 +33,8 @@ from taiga.projects.mixins.blocked import BlockedMixin
 from taiga.projects.tagging.models import TaggedMixin
 
 
-class Task(OCCModelMixin, WatchedModelMixin, BlockedMixin, TaggedMixin, DueDateMixin, models.Model):
+class Task(ExportModelOperationsMixin("task"), OCCModelMixin, WatchedModelMixin, BlockedMixin, TaggedMixin,
+           DueDateMixin, models.Model):
     user_story = models.ForeignKey(
         "userstories.UserStory",
         null=True,

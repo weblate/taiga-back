@@ -22,15 +22,15 @@ from django.utils import timezone
 from django.db import models
 from django.contrib.auth import get_user_model
 from django.utils.functional import cached_property
-from taiga.base.db.models.fields import JSONField
+from django_prometheus.models import ExportModelOperationsMixin
 
+from taiga.base.db.models.fields import JSONField
+from taiga.base.utils.diff import make_diff as make_diff_from_dicts
 from taiga.mdrender.service import get_diff_of_htmls
+from taiga.projects.custom_attributes.choices import CHECKBOX_TYPE, NUMBER_TYPE, TEXT_TYPE
 
 from .choices import HistoryType
 from .choices import HISTORY_TYPE_CHOICES
-
-from taiga.base.utils.diff import make_diff as make_diff_from_dicts
-from taiga.projects.custom_attributes.choices import CHECKBOX_TYPE, NUMBER_TYPE, TEXT_TYPE
 
 # This keys has been removed from freeze_impl so we can have objects where the
 # previous diff has value for the attribute and we want to prevent their propagation
@@ -41,7 +41,7 @@ def _generate_uuid():
     return str(uuid.uuid1())
 
 
-class HistoryEntry(models.Model):
+class HistoryEntry(ExportModelOperationsMixin("history_entry"), models.Model):
     """
     Domain model that represents a history
     entry storage table.

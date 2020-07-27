@@ -17,14 +17,15 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 from django.conf import settings
-
 from django.db import models
 from django.utils import timezone
+
+from django_prometheus.models import ExportModelOperationsMixin
 
 from .choices import HOMEPAGE_CHOICES, Section
 
 
-class UserProjectSettings(models.Model):
+class UserProjectSettings(ExportModelOperationsMixin("user_project_settings"), models.Model):
     """
     This class represents a persistence for
     project user notifications preference.

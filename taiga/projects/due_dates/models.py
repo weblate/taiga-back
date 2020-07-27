@@ -15,8 +15,10 @@
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
+from django_prometheus.models import ExportModelOperationsMixin
 
-class DueDateMixin(models.Model):
+
+class DueDateMixin(ExportModelOperationsMixin("duedate"), models.Model):
     due_date = models.DateField(
         blank=True, null=True, default=None, verbose_name=_('due date'),
     )

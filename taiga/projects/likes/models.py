@@ -22,8 +22,10 @@ from django.contrib.contenttypes.fields import GenericForeignKey
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
+from django_prometheus.models import ExportModelOperationsMixin
 
-class Like(models.Model):
+
+class Like(ExportModelOperationsMixin("like"), models.Model):
     content_type = models.ForeignKey("contenttypes.ContentType", on_delete=models.CASCADE)
     object_id = models.PositiveIntegerField()
     content_object = GenericForeignKey("content_type", "object_id")

@@ -35,9 +35,10 @@ from django.dispatch import receiver
 from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
 
-from taiga.base.db.models.fields import JSONField
+from django_prometheus.models import ExportModelOperationsMixin
 from django_pglocks import advisory_lock
 
+from taiga.base.db.models.fields import JSONField
 from taiga.auth.tokens import get_token_for_user
 from taiga.base.utils.colors import generate_random_hex_color
 from taiga.base.utils.slug import slugify_uniquely
@@ -130,7 +131,7 @@ def get_default_uuid():
     return uuid.uuid4().hex
 
 
-class User(AbstractBaseUser, PermissionsMixin):
+class User(ExportModelOperationsMixin("user"), AbstractBaseUser, PermissionsMixin):
     uuid = models.CharField(max_length=32, editable=False, null=False,
                             blank=False, unique=True, default=get_default_uuid)
     username = models.CharField(_("username"), max_length=255, unique=True,
@@ -307,7 +308,7 @@ class User(AbstractBaseUser, PermissionsMixin):
         self.memberships.all().delete()
 
 
-class Role(models.Model):
+class Role(ExportModelOperationsMixin("role"), models.Model):
     name = models.CharField(max_length=200, null=False, blank=False,
                             verbose_name=_("name"))
     slug = models.SlugField(max_length=250, null=False, blank=True,
@@ -345,7 +346,7 @@ class Role(models.Model):
         return self.name
 
 
-class AuthData(models.Model):
+class AuthData(ExportModelOperationsMixin("authdata"), models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name="auth_data", on_delete=models.CASCADE)
     key = models.SlugField(max_length=50)
     value = models.CharField(max_length=300)

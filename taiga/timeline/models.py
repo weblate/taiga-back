@@ -17,16 +17,17 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 from django.db import models
-from taiga.base.db.models.fields import JSONField
 from django.utils import timezone
-
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes.fields import GenericForeignKey
 
+from django_prometheus.models import ExportModelOperationsMixin
+
+from taiga.base.db.models.fields import JSONField
 from taiga.projects.models import Project
 
 
-class Timeline(models.Model):
+class Timeline(ExportModelOperationsMixin("timeline"), models.Model):
     content_type = models.ForeignKey(ContentType, related_name="content_type_timelines", on_delete=models.CASCADE)
     object_id = models.PositiveIntegerField()
     content_object = GenericForeignKey('content_type', 'object_id')

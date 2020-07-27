@@ -18,10 +18,11 @@
 
 from django.conf import settings
 from django.contrib.contenttypes.fields import GenericForeignKey
-
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 from django.utils import timezone
+
+from django_prometheus.models import ExportModelOperationsMixin
 
 from taiga.base.db.models.fields import JSONField
 from taiga.projects.history.choices import HISTORY_TYPE_CHOICES
@@ -29,7 +30,7 @@ from taiga.projects.history.choices import HISTORY_TYPE_CHOICES
 from .choices import NOTIFY_LEVEL_CHOICES, NotifyLevel
 
 
-class NotifyPolicy(models.Model):
+class NotifyPolicy(ExportModelOperationsMixin("notify_policy"), models.Model):
     """
     This class represents a persistence for
     project user notifications preference.
@@ -55,7 +56,7 @@ class NotifyPolicy(models.Model):
         return super().save(*args, **kwargs)
 
 
-class HistoryChangeNotification(models.Model):
+class HistoryChangeNotification(ExportModelOperationsMixin("historychange_notification"), models.Model):
     """
     This class controls the pending notifications for an object, it should be instantiated
     or updated when an object requires notifications.
@@ -94,7 +95,7 @@ class HistoryChangeNotification(models.Model):
         unique_together = ("key", "owner", "project", "history_type")
 
 
-class Watched(models.Model):
+class Watched(ExportModelOperationsMixin("watched"), models.Model):
     content_type = models.ForeignKey("contenttypes.ContentType", on_delete=models.CASCADE)
     object_id = models.PositiveIntegerField()
     content_object = GenericForeignKey("content_type", "object_id")
@@ -122,7 +123,7 @@ class Watched(models.Model):
         unique_together = ("content_type", "object_id", "user", "project")
 
 
-class WebNotification(models.Model):
+class WebNotification(ExportModelOperationsMixin("web_notifications"), models.Model):
     created = models.DateTimeField(default=timezone.now, db_index=True)
     read = models.DateTimeField(default=None, null=True)
     user = models.ForeignKey(

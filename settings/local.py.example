@@ -30,7 +30,7 @@ from .development import *
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
+        "ENGINE": "django.db.backends.postgresql",
         'NAME': 'taiga',
         'USER': 'taiga',
         'PASSWORD': 'changeme',
@@ -203,3 +203,45 @@ DATABASES = {
 #    "app_id": "XXXXXX_get_a_valid_app_id_from_asana_XXXXXX",
 #    "app_secret": "XXXXXX_get_a_valid_app_secret_from_asana_XXXXXX"
 #}
+
+
+#########################################
+## PROMETHEUS
+#########################################
+
+#
+# More info at:
+#  - https://github.com/korfuri/django-prometheus
+#  - https://github.com/korfuri/django-prometheus/blob/master/documentation/exports.md
+#
+
+# Monitoring the databases
+#DATABASES["default"]["ENGINE"] = "django_prometheus.db.backends.postgresql",
+
+# Monitoring the cache
+#CACHES["default"]["BACKEND"] = "django_prometheus.cache.backends.locmem.LocMemCache",
+
+# Monitoring requests/responses
+#MIDDLEWARE = (
+#    ['django_prometheus.middleware.PrometheusBeforeMiddleware'] +
+#    MIDDLEWARE +
+#    ['django_prometheus.middleware.PrometheusAfterMiddleware']
+#)
+
+# Show metrics at '/metrics' url
+#PROMETHEUS_METRICS_URL = True
+
+# By default Prometheus use the same thread as django. To ensure that issues in your
+# Django app do not affect the monitoring, it is recommended to export /metrics in an
+# HTTPServer running in a daemon thread. This will prevent that problems such as
+# thread starvation or low-level bugs in Django do not affect the export of your
+# metrics, which may be more needed than ever if these problems occur.
+#
+# This is incompatible with reload mode y development envs (with manage.py runserver).
+# Remember to use '--noreload' to prevent errors.
+#
+# You can find more info about how to exporting metrics at:
+# https://github.com/korfuri/django-prometheus/blob/master/documentation/exports.md
+#
+#PROMETHEUS_METRICS_EXPORT_PORT = 8001
+#PROMETHEUS_METRICS_EXPORT_ADDRESS = ""  # all addresses

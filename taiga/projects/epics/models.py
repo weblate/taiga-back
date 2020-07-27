@@ -23,6 +23,8 @@ from django.conf import settings
 from django.utils.translation import ugettext_lazy as _
 from django.utils import timezone
 
+from django_prometheus.models import ExportModelOperationsMixin
+
 from taiga.base.utils.colors import generate_random_predefined_hex_color
 from taiga.base.utils.time import timestamp_ms
 from taiga.projects.tagging.models import TaggedMixin
@@ -31,7 +33,7 @@ from taiga.projects.notifications.mixins import WatchedModelMixin
 from taiga.projects.mixins.blocked import BlockedMixin
 
 
-class Epic(OCCModelMixin, WatchedModelMixin, BlockedMixin, TaggedMixin, models.Model):
+class Epic(ExportModelOperationsMixin("epic"), OCCModelMixin, WatchedModelMixin, BlockedMixin, TaggedMixin, models.Model):
     ref = models.BigIntegerField(db_index=True, null=True, blank=True, default=None,
                                  verbose_name=_("ref"))
     project = models.ForeignKey(
@@ -113,7 +115,7 @@ class Epic(OCCModelMixin, WatchedModelMixin, BlockedMixin, TaggedMixin, models.M
         super().save(*args, **kwargs)
 
 
-class RelatedUserStory(WatchedModelMixin, models.Model):
+class RelatedUserStory(ExportModelOperationsMixin("related_userstory"), WatchedModelMixin, models.Model):
     user_story = models.ForeignKey("userstories.UserStory", on_delete=models.CASCADE)
     epic = models.ForeignKey("epics.Epic", on_delete=models.CASCADE)
 

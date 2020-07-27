@@ -19,10 +19,12 @@
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
+from django_prometheus.models import ExportModelOperationsMixin
+
 from taiga.base.db.models.fields import JSONField
 
 
-class Webhook(models.Model):
+class Webhook(ExportModelOperationsMixin("webhook"), models.Model):
     project = models.ForeignKey(
         "projects.Project",
         null=False,
@@ -39,7 +41,7 @@ class Webhook(models.Model):
         ordering = ['name', '-id']
 
 
-class WebhookLog(models.Model):
+class WebhookLog(ExportModelOperationsMixin("webhook_log"), models.Model):
     webhook = models.ForeignKey(
         Webhook,
         null=False,

@@ -26,6 +26,8 @@ from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
 from django.utils.text import get_valid_filename
 
+from django_prometheus.models import ExportModelOperationsMixin
+
 from taiga.base.utils.files import get_file_path
 
 
@@ -33,7 +35,7 @@ def get_attachment_file_path(instance, filename):
     return get_file_path(instance, filename, "attachments")
 
 
-class Attachment(models.Model):
+class Attachment(ExportModelOperationsMixin("attachment"), models.Model):
     owner = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         null=True,

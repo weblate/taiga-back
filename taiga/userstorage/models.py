@@ -19,10 +19,13 @@
 from django.db import models
 from django.conf import settings
 from django.utils.translation import ugettext_lazy as _
+
+from django_prometheus.models import ExportModelOperationsMixin
+
 from taiga.base.db.models.fields import JSONField
 
 
-class StorageEntry(models.Model):
+class StorageEntry(ExportModelOperationsMixin("storage_entry"), models.Model):
     owner = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         blank=False,

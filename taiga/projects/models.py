@@ -27,6 +27,7 @@ from django.utils.translation import ugettext_lazy as _
 from django.utils import timezone
 from django.utils.functional import cached_property
 
+from django_prometheus.models import ExportModelOperationsMixin
 from django_pglocks import advisory_lock
 
 from taiga.base.db.models.fields import JSONField
@@ -61,7 +62,7 @@ def get_project_logo_file_path(instance, filename):
     return get_file_path(instance, filename, "project")
 
 
-class Membership(models.Model):
+class Membership(ExportModelOperationsMixin('membership'), models.Model):
     # This model stores all project memberships. Also
     # stores invitations to memberships that does not have
     # assigned user.
@@ -166,7 +167,7 @@ class ProjectDefaults(models.Model):
         abstract = True
 
 
-class Project(ProjectDefaults, TaggedMixin, TagsColorsMixin, models.Model):
+class Project(ExportModelOperationsMixin("project"), ProjectDefaults, TaggedMixin, TagsColorsMixin, models.Model):
     name = models.CharField(max_length=250, null=False, blank=False,
                             verbose_name=_("name"))
     slug = models.SlugField(max_length=250, unique=True, null=False, blank=True,
@@ -539,7 +540,7 @@ class Project(ProjectDefaults, TaggedMixin, TagsColorsMixin, models.Model):
             connect_memberships_signals()
 
 
-class ProjectModulesConfig(models.Model):
+class ProjectModulesConfig(ExportModelOperationsMixin("project_modules_config"), models.Model):
     project = models.OneToOneField(
         "Project",
         null=False,
@@ -557,7 +558,7 @@ class ProjectModulesConfig(models.Model):
 
 
 # Epic common Models
-class EpicStatus(models.Model):
+class EpicStatus(ExportModelOperationsMixin("epic_status"), models.Model):
     name = models.CharField(max_length=255, null=False, blank=False,
                             verbose_name=_("name"))
     slug = models.SlugField(max_length=255, null=False, blank=True,
@@ -596,7 +597,7 @@ class EpicStatus(models.Model):
 
 
 # User Stories common Models
-class UserStoryStatus(models.Model):
+class UserStoryStatus(ExportModelOperationsMixin("userstory_status"), models.Model):
     name = models.CharField(max_length=255, null=False, blank=False,
                             verbose_name=_("name"))
     slug = models.SlugField(max_length=255, null=False, blank=True,
@@ -638,7 +639,7 @@ class UserStoryStatus(models.Model):
         return super().save(*args, **kwargs)
 
 
-class Points(models.Model):
+class Points(ExportModelOperationsMixin("point"), models.Model):
     name = models.CharField(max_length=255, null=False, blank=False,
                             verbose_name=_("name"))
     order = models.IntegerField(default=10, null=False, blank=False,
@@ -664,7 +665,7 @@ class Points(models.Model):
         return self.name
 
 
-class UserStoryDueDate(models.Model):
+class UserStoryDueDate(ExportModelOperationsMixin("userstory_duedate"), models.Model):
     name = models.CharField(max_length=255, null=False, blank=False,
                             verbose_name=_("name"))
     order = models.IntegerField(default=10, null=False, blank=False,
@@ -695,7 +696,7 @@ class UserStoryDueDate(models.Model):
 
 
 # Tasks common models
-class TaskStatus(models.Model):
+class TaskStatus(ExportModelOperationsMixin("task_status"), models.Model):
     name = models.CharField(max_length=255, null=False, blank=False,
                             verbose_name=_("name"))
     slug = models.SlugField(max_length=255, null=False, blank=True,
@@ -733,7 +734,7 @@ class TaskStatus(models.Model):
         return super().save(*args, **kwargs)
 
 
-class TaskDueDate(models.Model):
+class TaskDueDate(ExportModelOperationsMixin("task_duedates"), models.Model):
     name = models.CharField(max_length=255, null=False, blank=False,
                             verbose_name=_("name"))
     order = models.IntegerField(default=10, null=False, blank=False,
@@ -765,7 +766,7 @@ class TaskDueDate(models.Model):
 
 # Issue common Models
 
-class Priority(models.Model):
+class Priority(ExportModelOperationsMixin("priority"), models.Model):
     name = models.CharField(max_length=255, null=False, blank=False,
                             verbose_name=_("name"))
     order = models.IntegerField(default=10, null=False, blank=False,
@@ -791,7 +792,7 @@ class Priority(models.Model):
         return self.name
 
 
-class Severity(models.Model):
+class Severity(ExportModelOperationsMixin("severity"), models.Model):
     name = models.CharField(max_length=255, null=False, blank=False,
                             verbose_name=_("name"))
     order = models.IntegerField(default=10, null=False, blank=False,
@@ -817,7 +818,7 @@ class Severity(models.Model):
         return self.name
 
 
-class IssueStatus(models.Model):
+class IssueStatus(ExportModelOperationsMixin("issue_status"), models.Model):
     name = models.CharField(max_length=255, null=False, blank=False,
                             verbose_name=_("name"))
     slug = models.SlugField(max_length=255, null=False, blank=True,
@@ -855,7 +856,7 @@ class IssueStatus(models.Model):
         return super().save(*args, **kwargs)
 
 
-class IssueType(models.Model):
+class IssueType(ExportModelOperationsMixin("issue_type"), models.Model):
     name = models.CharField(max_length=255, null=False, blank=False,
                             verbose_name=_("name"))
     order = models.IntegerField(default=10, null=False, blank=False,
@@ -881,7 +882,7 @@ class IssueType(models.Model):
         return self.name
 
 
-class IssueDueDate(models.Model):
+class IssueDueDate(ExportModelOperationsMixin("issue_duedate"), models.Model):
     name = models.CharField(max_length=255, null=False, blank=False,
                             verbose_name=_("name"))
     order = models.IntegerField(default=10, null=False, blank=False,
@@ -911,7 +912,7 @@ class IssueDueDate(models.Model):
         return self.name
 
 
-class ProjectTemplate(TaggedMixin, TagsColorsMixin, models.Model):
+class ProjectTemplate(ExportModelOperationsMixin("project_template"), TaggedMixin, TagsColorsMixin, models.Model):
     name = models.CharField(max_length=250, null=False, blank=False,
                             verbose_name=_("name"))
     slug = models.SlugField(max_length=250, null=False, blank=True,

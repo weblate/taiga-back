@@ -21,6 +21,8 @@ from django.core import signing
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
+from django_prometheus.models import ExportModelOperationsMixin
+
 import uuid
 
 
@@ -28,7 +30,7 @@ def _generate_uuid():
     return str(uuid.uuid4())
 
 
-class Application(models.Model):
+class Application(ExportModelOperationsMixin("application"), models.Model):
     id = models.CharField(primary_key=True, max_length=255, unique=True, default=_generate_uuid)
 
     name = models.CharField(max_length=255, null=False, blank=False,
@@ -49,7 +51,7 @@ class Application(models.Model):
         return self.name
 
 
-class ApplicationToken(models.Model):
+class ApplicationToken(ExportModelOperationsMixin("application_tokens"), models.Model):
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         blank=False,

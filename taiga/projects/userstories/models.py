@@ -23,6 +23,7 @@ from django.conf import settings
 from django.utils.translation import ugettext_lazy as _
 from django.utils import timezone
 
+from django_prometheus.models import ExportModelOperationsMixin
 from picklefield.fields import PickledObjectField
 
 from taiga.base.utils.time import timestamp_ms
@@ -33,7 +34,7 @@ from taiga.projects.notifications.mixins import WatchedModelMixin
 from taiga.projects.mixins.blocked import BlockedMixin
 
 
-class RolePoints(models.Model):
+class RolePoints(ExportModelOperationsMixin("role_points"), models.Model):
     user_story = models.ForeignKey(
         "UserStory",
         null=False,
@@ -73,7 +74,8 @@ class RolePoints(models.Model):
         return self.user_story.project
 
 
-class UserStory(OCCModelMixin, WatchedModelMixin, BlockedMixin, TaggedMixin, DueDateMixin, models.Model):
+class UserStory(ExportModelOperationsMixin("userstory"), OCCModelMixin, WatchedModelMixin, BlockedMixin,
+                TaggedMixin, DueDateMixin, models.Model):
     ref = models.BigIntegerField(db_index=True, null=True, blank=True, default=None,
                                  verbose_name=_("ref"))
     milestone = models.ForeignKey("milestones.Milestone", null=True, blank=True,

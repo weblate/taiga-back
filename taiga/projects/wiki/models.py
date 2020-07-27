@@ -21,6 +21,8 @@ from django.contrib.contenttypes.fields import GenericRelation
 from django.conf import settings
 from django.utils.translation import ugettext_lazy as _
 from django.utils import timezone
+
+from django_prometheus.models import ExportModelOperationsMixin
 from django_pglocks import advisory_lock
 
 from taiga.base.utils.slug import slugify_uniquely_for_queryset
@@ -29,7 +31,7 @@ from taiga.projects.notifications.mixins import WatchedModelMixin
 from taiga.projects.occ import OCCModelMixin
 
 
-class WikiPage(OCCModelMixin, WatchedModelMixin, models.Model):
+class WikiPage(ExportModelOperationsMixin("wiki_page"), OCCModelMixin, WatchedModelMixin, models.Model):
     project = models.ForeignKey(
         "projects.Project",
         null=False,
@@ -82,7 +84,7 @@ class WikiPage(OCCModelMixin, WatchedModelMixin, models.Model):
         return super().save(*args, **kwargs)
 
 
-class WikiLink(models.Model):
+class WikiLink(ExportModelOperationsMixin("wiki_link"), models.Model):
     project = models.ForeignKey(
         "projects.Project",
         null=False,

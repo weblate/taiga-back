@@ -20,6 +20,8 @@ from django.db import models
 from django.utils.translation import ugettext_lazy as _
 from django.utils import timezone
 
+from django_prometheus.models import ExportModelOperationsMixin
+
 from taiga.base.db.models.fields import JSONField
 
 from taiga.base.utils.time import timestamp_ms
@@ -69,25 +71,25 @@ class AbstractCustomAttribute(models.Model):
         return super().save(*args, **kwargs)
 
 
-class EpicCustomAttribute(AbstractCustomAttribute):
+class EpicCustomAttribute(ExportModelOperationsMixin("epic_customattributes"), AbstractCustomAttribute):
     class Meta(AbstractCustomAttribute.Meta):
         verbose_name = "epic custom attribute"
         verbose_name_plural = "epic custom attributes"
 
 
-class UserStoryCustomAttribute(AbstractCustomAttribute):
+class UserStoryCustomAttribute(ExportModelOperationsMixin("userstory_customattribute"), AbstractCustomAttribute):
     class Meta(AbstractCustomAttribute.Meta):
         verbose_name = "user story custom attribute"
         verbose_name_plural = "user story custom attributes"
 
 
-class TaskCustomAttribute(AbstractCustomAttribute):
+class TaskCustomAttribute(ExportModelOperationsMixin("task_customattribute"), AbstractCustomAttribute):
     class Meta(AbstractCustomAttribute.Meta):
         verbose_name = "task custom attribute"
         verbose_name_plural = "task custom attributes"
 
 
-class IssueCustomAttribute(AbstractCustomAttribute):
+class IssueCustomAttribute(ExportModelOperationsMixin("issue_customattribute"), AbstractCustomAttribute):
     class Meta(AbstractCustomAttribute.Meta):
         verbose_name = "issue custom attribute"
         verbose_name_plural = "issue custom attributes"
@@ -105,7 +107,8 @@ class AbstractCustomAttributesValues(OCCModelMixin, models.Model):
         ordering = ["id"]
 
 
-class EpicCustomAttributesValues(AbstractCustomAttributesValues):
+class EpicCustomAttributesValues(ExportModelOperationsMixin("epic_customattributevalue"),
+                                 AbstractCustomAttributesValues):
     epic = models.OneToOneField(
         "epics.Epic",
         null=False,
@@ -126,7 +129,8 @@ class EpicCustomAttributesValues(AbstractCustomAttributesValues):
         return self.epic.project
 
 
-class UserStoryCustomAttributesValues(AbstractCustomAttributesValues):
+class UserStoryCustomAttributesValues(ExportModelOperationsMixin("userstory_customattributevalue"),
+                                      AbstractCustomAttributesValues):
     user_story = models.OneToOneField(
         "userstories.UserStory",
         null=False,
@@ -147,7 +151,8 @@ class UserStoryCustomAttributesValues(AbstractCustomAttributesValues):
         return self.user_story.project
 
 
-class TaskCustomAttributesValues(AbstractCustomAttributesValues):
+class TaskCustomAttributesValues(ExportModelOperationsMixin("task_customattributevalue"),
+                                 AbstractCustomAttributesValues):
     task = models.OneToOneField(
         "tasks.Task",
         null=False,
@@ -168,7 +173,8 @@ class TaskCustomAttributesValues(AbstractCustomAttributesValues):
         return self.task.project
 
 
-class IssueCustomAttributesValues(AbstractCustomAttributesValues):
+class IssueCustomAttributesValues(ExportModelOperationsMixin("issue_customattributevalue"),
+                                  AbstractCustomAttributesValues):
     issue = models.OneToOneField(
         "issues.Issue",
         null=False,

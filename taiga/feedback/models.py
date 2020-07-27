@@ -19,8 +19,10 @@
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
+from django_prometheus.models import ExportModelOperationsMixin
 
-class FeedbackEntry(models.Model):
+
+class FeedbackEntry(ExportModelOperationsMixin("feedback_entry"), models.Model):
     full_name = models.CharField(null=False, blank=False, max_length=256,
                                  verbose_name=_('full name'))
     email = models.EmailField(null=False, blank=False, max_length=255,

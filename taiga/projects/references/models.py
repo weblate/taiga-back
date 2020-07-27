@@ -21,6 +21,8 @@ from django.utils import timezone
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes.fields import GenericForeignKey
 
+from django_prometheus.models import ExportModelOperationsMixin
+
 from taiga.projects.models import Project
 from taiga.projects.epics.models import Epic
 from taiga.projects.userstories.models import UserStory
@@ -30,7 +32,7 @@ from taiga.projects.issues.models import Issue
 from . import sequences as seq
 
 
-class Reference(models.Model):
+class Reference(ExportModelOperationsMixin("reference"), models.Model):
     content_type = models.ForeignKey(ContentType, related_name="+", on_delete=models.CASCADE)
     object_id = models.PositiveIntegerField()
     ref = models.BigIntegerField()

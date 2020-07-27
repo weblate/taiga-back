@@ -26,9 +26,9 @@ if [ -z "$database" ]; then
 fi
 
 echo "-> Remove taiga DB" $database
-dropdb $database
+dropdb -h localhost -p 5432 $database
 echo "-> Create taiga DB"
-createdb $database
+createdb -h localhost -p 5432 $database
 
 echo "-> Load migrations"
 python manage.py migrate

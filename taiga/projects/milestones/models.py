@@ -24,6 +24,8 @@ from django.utils import timezone
 from django.core.exceptions import ValidationError
 from django.utils.functional import cached_property
 
+from django_prometheus.models import ExportModelOperationsMixin
+
 from taiga.base.utils.slug import slugify_uniquely
 from taiga.base.utils.dicts import dict_sum
 from taiga.projects.notifications.mixins import WatchedModelMixin
@@ -32,7 +34,7 @@ import itertools
 import datetime
 
 
-class Milestone(WatchedModelMixin, models.Model):
+class Milestone(ExportModelOperationsMixin("milestone"), WatchedModelMixin, models.Model):
     name = models.CharField(max_length=200, db_index=True, null=False, blank=False,
                             verbose_name=_("name"))
     # TODO: Change the unique restriction to a unique together with the project id
