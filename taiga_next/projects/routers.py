@@ -14,27 +14,30 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from fastapi import FastAPI
-from fastapi.middleware.cors import CORSMiddleware
+from fastapi import APIRouter
 
-from . import __title__, __description__, __version__
-from .routers import router, tags_metadata
+from . import views
+#from .schemas import Project
 
-api = FastAPI(
-    title=__title__,
-    description=__description__,
-    version=__version__,
-    openapi_tags=tags_metadata
-)
+metadata = {
+    "name": "projects",
+    "description": "Endpoint with actions over projects.",
+}
 
+router = APIRouter()
 
-# Setup CORS
-api.add_middleware(
-    CORSMiddleware,
-    allow_origins=["*"],
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
+router.get(
+    "/",
+    name="projects.list",
+    tags=["projects"],
+    summary="List projects",
+    #response_model=List[Project],
+)(views.list_projects)
 
-api.include_router(router)
+router.get(
+    "/<project_id>",
+    name="projects.get",
+    tags=["projects"],
+    summary="Get some project datails",
+    #response_model=Project,
+)(views.get_project)

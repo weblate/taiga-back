@@ -14,27 +14,18 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from fastapi import FastAPI
-from fastapi.middleware.cors import CORSMiddleware
 
-from . import __title__, __description__, __version__
-from .routers import router, tags_metadata
+def list():
+    pass
 
-api = FastAPI(
-    title=__title__,
-    description=__description__,
-    version=__version__,
-    openapi_tags=tags_metadata
-)
+def get():
+    pass
 
+def put():
+    pass
 
-# Setup CORS
-api.add_middleware(
-    CORSMiddleware,
-    allow_origins=["*"],
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
+def patch():
+    pass
 
-api.include_router(router)
+def delete():
+    pass

@@ -14,27 +14,14 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from fastapi import FastAPI
-from fastapi.middleware.cors import CORSMiddleware
+from fastapi import APIRouter
 
-from . import __title__, __description__, __version__
-from .routers import router, tags_metadata
-
-api = FastAPI(
-    title=__title__,
-    description=__description__,
-    version=__version__,
-    openapi_tags=tags_metadata
-)
+from taiga_next.projects import routers as projects_routers
 
 
-# Setup CORS
-api.add_middleware(
-    CORSMiddleware,
-    allow_origins=["*"],
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
+router = APIRouter()
+router.include_router(projects_routers.router, prefix="/projects", tags=["projects"])
 
-api.include_router(router)
+tags_metadata = [
+    projects_routers.metadata,
+]

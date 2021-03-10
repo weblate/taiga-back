@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-
 # Copyright (C) 2014-present Taiga Agile LLC
 #
 # This program is free software: you can redistribute it and/or modify
@@ -16,30 +15,28 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 """
-WSGI config for taiga project.
+New WSGI config for taiga project.
 
 You can run this with uvicorn or gunicorn:
 
     # with gunicorn
-    DJANGO_SETTINGS_MODULE=settings.config gunicorn wsgi:app -w 4 -k uvicorn.workers.UvicornWorker
+    DJANGO_SETTINGS_MODULE=settings.config gunicorn taiga_next.wsgi:app -w 4 -k uvicorn.workers.UvicornWorker
 
     # with uvicorn
-    DJANGO_SETTINGS_MODULE=settings.config uvicorn wsgi:app --reload
+    DJANGO_SETTINGS_MODULE=settings.config uvicorn taiga_next.wsgi:app --reload
 
 """
-import os, sys, inspect
+import os, sys
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.realpath(__file__))))
 
 from starlette.applications import Starlette
 from starlette.middleware.wsgi import WSGIMiddleware
 from starlette.staticfiles import StaticFiles
 
 
-current_dir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
-parent_dir = os.path.dirname(current_dir)
-sys.path.insert(0, parent_dir)
 
-from taiga.wsgi import application as django_api
-from taiga_next.main import app as api
+from taiga.wsgi import application as django_app
+from taiga_next.main import api
 
 
 app = Starlette()
@@ -47,5 +44,5 @@ app = Starlette()
 # Mount the new api
 app.mount("/api/v2/", app=api)
 
-# Serve old api, admin, static and media files urls
-app.mount("/", WSGIMiddleware(django_api))
+# Serve old api, sitemaps, admin, static and media files urls
+app.mount("/", WSGIMiddleware(django_app))

@@ -14,27 +14,26 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from fastapi import FastAPI
-from fastapi.middleware.cors import CORSMiddleware
+from functools import lru_cache
+from typing import Tuple
 
-from . import __title__, __description__, __version__
-from .routers import router, tags_metadata
-
-api = FastAPI(
-    title=__title__,
-    description=__description__,
-    version=__version__,
-    openapi_tags=tags_metadata
-)
+from pydantic import BaseSettings
 
 
-# Setup CORS
-api.add_middleware(
-    CORSMiddleware,
-    allow_origins=["*"],
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
+class Settings(BaseSettings):
+    app_secret: str = "app_secret"
+    admins: Tuple[Tuple[str, str], ...]
 
-api.include_router(router)
+    #class Config:
+    #    env_file = ".env"
+
+
+@property
+@lru_cache()
+def settings():
+    from django.conf import settings as django_settings
+
+    return Settings(
+        app_secret=django_settings.SECRET_KEY,
+        admins=django_settings.ADMINS,
+    )
