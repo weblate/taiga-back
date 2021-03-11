@@ -29,7 +29,6 @@ router = APIRouter()
 router.get(
     "/",
     name="projects.list",
-    tags=["projects"],
     summary="List projects",
     #response_model=List[Project],
 )(views.list_projects)
@@ -37,7 +36,6 @@ router.get(
 router.get(
     "/<project_id>",
     name="projects.get",
-    tags=["projects"],
     summary="Get some project datails",
     #response_model=Project,
 )(views.get_project)

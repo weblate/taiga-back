@@ -15,25 +15,24 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 from functools import lru_cache
-from typing import Tuple
+from typing import Tuple, List
 
-from pydantic import BaseSettings
-
+from pydantic import AnyHttpUrl, BaseSettings, EmailStr
 
 class Settings(BaseSettings):
-    app_secret: str = "app_secret"
-    admins: Tuple[Tuple[str, str], ...]
-
+    SECRET_KEY: str = "app_secret"
+    ADMINS: Tuple[Tuple[str, EmailStr], ...]
+    CORS_ORIGINS: List[AnyHttpUrl] = ["*"]
     #class Config:
     #    env_file = ".env"
 
 
 @property
 @lru_cache()
-def settings():
+def settings() -> Settings:
     from django.conf import settings as django_settings
 
     return Settings(
-        app_secret=django_settings.SECRET_KEY,
-        admins=django_settings.ADMINS,
+        SECRET_KEY=django_settings.APP_SECRET,
+        ADMINS=django_settings.ADMINS,
     )

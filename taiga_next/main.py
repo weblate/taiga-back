@@ -17,8 +17,9 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from . import __title__, __description__, __version__
-from .routers import router, tags_metadata
+from taiga_next import __title__, __description__, __version__
+from taiga_next.conf import settings
+from taiga_next.routers import router, tags_metadata
 
 api = FastAPI(
     title=__title__,
@@ -31,7 +32,7 @@ api = FastAPI(
 # Setup CORS
 api.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=settings.CORS_ORIGINS,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],

@@ -1,0 +1,5 @@
+aiofiles==0.6.0
+uvicorn[standard]==0.13.4
+
+fastapi==0.63.0
+pydantic[email,dotenv]==1.8.1
