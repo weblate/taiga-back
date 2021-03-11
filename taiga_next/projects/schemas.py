@@ -14,4 +14,32 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+from datetime import datetime
+from typing import List, Optional
 
+from pydantic import BaseModel
+
+
+class ProjectBaseSchema(BaseModel):
+    name: str
+    description: str
+    tags: List[str]
+    is_private: bool
+    public_permissions: List[str]
+    anon_permissions: List[str]
+    is_epics_activated: bool
+    is_backlog_activated: bool
+    is_kanban_activated: bool
+    is_issues_activated: bool
+    is_wiki_activated: bool
+
+
+class ProjectSchema(ProjectBaseSchema):
+    id: int
+    slug: str
+    owner_id: int
+    created_date: datetime
+    modified_date: datetime
+
+    class Config:
+        orm_mode = True

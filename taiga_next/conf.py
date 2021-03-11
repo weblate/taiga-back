@@ -17,22 +17,25 @@
 from functools import lru_cache
 from typing import Tuple, List
 
-from pydantic import AnyHttpUrl, BaseSettings, EmailStr
+from pydantic import BaseSettings, EmailStr
 
 class Settings(BaseSettings):
     SECRET_KEY: str = "app_secret"
     ADMINS: Tuple[Tuple[str, EmailStr], ...]
-    CORS_ORIGINS: List[AnyHttpUrl] = ["*"]
+    CORS_ORIGINS: List[str] = ["*"]
+
     #class Config:
     #    env_file = ".env"
 
 
-@property
 @lru_cache()
-def settings() -> Settings:
+def get_settings() -> Settings:
     from django.conf import settings as django_settings
 
     return Settings(
-        SECRET_KEY=django_settings.APP_SECRET,
+        SECRET_KEY=django_settings.SECRET_KEY,
         ADMINS=django_settings.ADMINS,
     )
+
+
+settings = get_settings()

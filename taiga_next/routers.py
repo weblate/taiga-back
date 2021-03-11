@@ -16,12 +16,12 @@
 
 from fastapi import APIRouter
 
-from taiga_next.projects import routers as projects_routers
+from taiga_next.projects import api as projects_api
 
 
 router = APIRouter()
-router.include_router(projects_routers.router, prefix="/projects", tags=["projects"])
+router.include_router(projects_api.router, prefix="/projects", tags=["projects"])
 
 tags_metadata = [
-    projects_routers.metadata,
+    projects_api.metadata,
 ]

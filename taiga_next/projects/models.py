@@ -14,28 +14,4 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from fastapi import APIRouter
-
-from . import views
-#from .schemas import Project
-
-metadata = {
-    "name": "projects",
-    "description": "Endpoint with actions over projects.",
-}
-
-router = APIRouter()
-
-router.get(
-    "/",
-    name="projects.list",
-    summary="List projects",
-    #response_model=List[Project],
-)(views.list_projects)
-
-router.get(
-    "/<project_id>",
-    name="projects.get",
-    summary="Get some project datails",
-    #response_model=Project,
-)(views.get_project)
+from taiga.projects.models import Project   # pylint: disable=unused-import

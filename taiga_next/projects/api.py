@@ -13,19 +13,39 @@
 #
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
+from typing import Iterable, List, Union
+
+from fastapi import APIRouter, HTTPException
+
+from . import services
+from .models import Project
+from .schemas import ProjectSchema
 
 
-def list():
-    pass
+metadata = {
+    "name": "projects",
+    "description": "Endpoint with actions over projects.",
+}
 
-def get():
-    pass
+router = APIRouter()
 
-def put():
-    pass
+@router.get(
+    "/",
+    name="projects.list",
+    summary="List projects",
+    response_model=List[ProjectSchema]
+)
+def list_projects(offset: int = 0, limit: int = 100) -> Iterable[Project]:
+    return services.get_projects(offset=offset, limit=limit)
 
-def patch():
-    pass
-
-def delete():
-    pass
+@router.get(
+    "/<project_id>",
+    name="projects.get",
+    summary="Get some project datails",
+    response_model=ProjectSchema,
+)
+def get_project(project_id: int) -> Union[Project, HTTPException]:
+    project = services.get_project(project_id)
+    if project is None:
+        raise HTTPException(status_code=404, detail="API_NOT_FOUND")
+    return project

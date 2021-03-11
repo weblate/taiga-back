@@ -14,4 +14,14 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+from . import repositories
 
+
+def get_project(id: int):
+    return repositories.get_project(id)
+
+def get_project_by_slug(slug: str):
+    return repositories.get_project_by_slug(slug)
+
+def get_projects(offset: int = 0, limit: int = 100):
+    return list(repositories.get_projects(offset, limit))
