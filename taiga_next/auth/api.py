@@ -13,17 +13,25 @@
 #
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
+from typing import Iterable, List, Union
 
-from typing import Union
-
-from . import repositories
-
-
-def get_project(identifier: Union[int, str]):
-    if isinstance(identifier, int):
-        return repositories.get_project(identifier)
-    return repositories.get_project_by_slug(identifier)
+from fastapi import APIRouter
 
 
-def get_projects(offset: int = 0, limit: int = 100):
-    return list(repositories.get_projects(offset, limit))
+metadata = {
+    "name": "auth",
+    "description": "Endpoint with actions related to authentication process.",
+}
+
+router = APIRouter()
+
+
+@router.get(
+    "/login",
+    name="auth.login",
+    summary="User sign in",
+    #response_model=List[ProjectSchema]
+)
+def login():
+    pass
+

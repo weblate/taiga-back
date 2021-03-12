@@ -15,7 +15,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 from typing import Iterable, List, Union
 
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, Query
 
 from . import services
 from .models import Project
@@ -35,7 +35,13 @@ router = APIRouter()
     summary="List projects",
     response_model=List[ProjectSchema]
 )
-def list_projects(offset: int = 0, limit: int = 100) -> Iterable[Project]:
+def list_projects(
+    offset: int = Query(0, description="number of projects to skip"),
+    limit: int = Query(100, description="number of projects to show")
+):
+    """
+    Get a paginated list of visible projects.
+    """
     return services.get_projects(offset=offset, limit=limit)
 
 @router.get(
@@ -44,8 +50,14 @@ def list_projects(offset: int = 0, limit: int = 100) -> Iterable[Project]:
     summary="Get some project datails",
     response_model=ProjectSchema,
 )
-def get_project(project_id: int) -> Union[Project, HTTPException]:
-    project = services.get_project(project_id)
+def get_project(
+    project_id_or_slug: Union[int, str] = Query(None, description="the project id (integer) or the project slug (string)")
+):
+    """
+    Get project detail by id or slug.
+    """
+    project = services.get_project(project_id_or_slug)
+
     if project is None:
         raise HTTPException(status_code=404, detail="API_NOT_FOUND")
     return project

@@ -7,7 +7,11 @@
 aiofiles==0.6.0
     # via -r requirements-next.in
 click==7.1.2
-    # via uvicorn
+    # via
+    #   typer
+    #   uvicorn
+colorama==0.4.4
+    # via typer
 django-stubs==1.7.0
     # via -r requirements-next.in
 django==2.2.19
@@ -42,12 +46,16 @@ pytz==2021.1
     # via django
 pyyaml==5.4.1
     # via uvicorn
+shellingham==1.4.0
+    # via typer
 sqlparse==0.4.1
     # via django
 starlette==0.13.6
     # via fastapi
 typed-ast==1.4.2
     # via mypy
+typer[all]==0.3.2
+    # via -r requirements-next.in
 typing-extensions==3.7.4.3
     # via
     #   django-stubs

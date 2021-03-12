@@ -1,3 +1,5 @@
+typer[all]==0.3.2
+
 aiofiles==0.6.0
 uvicorn[standard]==0.13.4
 
