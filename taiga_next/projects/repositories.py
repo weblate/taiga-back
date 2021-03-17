@@ -26,7 +26,7 @@ def get_project(id: int) -> Union[Project, None]:
         return None
 
 
-def get_project_by_slug(slug: str) -> Project:
+def get_project_by_slug(slug: str) -> Union[Project, None]:
     try:
         return Project.objects.get(slug=slug)
     except Project.DoesNotExist:

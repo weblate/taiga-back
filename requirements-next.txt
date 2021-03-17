@@ -6,12 +6,20 @@
 #
 aiofiles==0.6.0
     # via -r requirements-next.in
+bcrypt==3.2.0
+    # via passlib
+cffi==1.14.5
+    # via
+    #   bcrypt
+    #   cryptography
 click==7.1.2
     # via
     #   typer
     #   uvicorn
 colorama==0.4.4
     # via typer
+cryptography==3.4.6
+    # via python-jose
 django-stubs==1.7.0
     # via -r requirements-next.in
 django==2.2.19
@@ -20,6 +28,8 @@ django==2.2.19
     #   django-stubs
 dnspython==2.1.0
     # via email-validator
+ecdsa==0.14.1
+    # via python-jose
 email-validator==1.1.2
     # via pydantic
 fastapi==0.63.0
@@ -34,6 +44,14 @@ mypy-extensions==0.4.3
     # via mypy
 mypy==0.812
     # via django-stubs
+passlib[bcrypt]==1.7.4
+    # via -r requirements-next.in
+pyasn1==0.4.8
+    # via
+    #   python-jose
+    #   rsa
+pycparser==2.20
+    # via cffi
 pydantic[dotenv,email]==1.8.1
     # via
     #   -r requirements-next.in
@@ -42,12 +60,21 @@ python-dotenv==0.15.0
     # via
     #   pydantic
     #   uvicorn
+python-jose[cryptography]==3.2.0
+    # via -r requirements-next.in
 pytz==2021.1
     # via django
 pyyaml==5.4.1
     # via uvicorn
+rsa==4.7.2
+    # via python-jose
 shellingham==1.4.0
     # via typer
+six==1.15.0
+    # via
+    #   bcrypt
+    #   ecdsa
+    #   python-jose
 sqlparse==0.4.1
     # via django
 starlette==0.13.6

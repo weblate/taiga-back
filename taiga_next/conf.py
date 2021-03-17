@@ -20,8 +20,12 @@ from typing import Tuple, List
 from pydantic import BaseSettings, EmailStr
 
 class Settings(BaseSettings):
-    SECRET_KEY: str = "app_secret"
     ADMINS: Tuple[Tuple[str, EmailStr], ...]
+    # Auth
+    SECRET_KEY: str = "app_secret"
+    ALGORITHM: str = "HS256"
+    ACCESS_TOKEN_EXPIRE_MINUTES: int = 30
+    # CORS
     CORS_ORIGINS: List[str] = ["*"]
 
     #class Config:
