@@ -14,7 +14,13 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
+from datetime import datetime, timedelta
+from typing import Optional
+
+from fastapi import Depends
+from fastapi.security import OAuth2PasswordBearer
+from jose import JWTError, jwt
+from passlib.context import CryptContext
 
 from taiga_next.conf import settings
 
@@ -24,9 +30,7 @@ from . import repositories
 
 # Auth
 
-pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
-
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
+pwd_context = CryptContext(schemes=settings.CRYPT_SCHEMES, deprecated="auto")
 
 
 def verify_password(plain_password, hashed_password):
@@ -52,7 +56,7 @@ def create_access_token(data: dict, expires_delta: Optional[timedelta] = None):
 # User
 
 def authenticate_user(username_or_email: str, password: str):
-    user = repositories.get_user(username_or_email, {"is_active": True})
+    user = repositories.get_user_by_username_or_email(username_or_email, extra_filters={"is_active": True})
     if not user:
         return False
     if not verify_password(password, user.password):
@@ -60,18 +64,26 @@ def authenticate_user(username_or_email: str, password: str):
     return user
 
 
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
+
+
 def get_current_user(token: str = Depends(oauth2_scheme)):
+    # Get payload
     try:
-        payload = jwt.decode(token, settings.SECRET_KEY, algorithms=[settings.JWT_ALGORITHM])
+        payload = jwt.decode(token, settings.SECRET_KEY, algorithms=[settings.JWT_ALGORITHMS])
     except JWTError:
         raise exp.invalid_credentials
 
+    # Get user
     username: str = payload.get("sub")
     if username is None:
         raise exp.invalid_credentials
-    user = get_user(username=token_data.username)
+    user = repositories.get_user_by_username_or_email(username)
     if user is None:
         raise exp.invalid_credentials
-    return user
 
+    # Check if is active
+    if not user.is_active:
+        raise exp.inactive_user
 
+    return current_user

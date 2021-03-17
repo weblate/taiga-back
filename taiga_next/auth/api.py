@@ -16,8 +16,11 @@
 
 from typing import Iterable, List, Union
 
-from fastapi import APIRouter
+from fastapi import APIRouter, Depends
 
+from . import exceptions as exp
+from .schemas import OAuth2PasswordRequestForm, LoginSchema
+from .services import authenticate_user, create_access_token
 
 metadata = {
     "name": "auth",
@@ -27,12 +30,17 @@ metadata = {
 router = APIRouter()
 
 
-@router.get(
+@router.post(
     "/login",
     name="auth.login",
     summary="User sign in",
-    #response_model=List[ProjectSchema]
+    response_model=LoginSchema
 )
-def login():
-    pass
+def login(form: OAuth2PasswordRequestForm = Depends()):
+    user = authenticate_user(form.username, form.password)
+    if not user:
+        raise exp.invalid_credentials
 
+    user.token_type = "bearer"
+    user.access_token = create_access_token(data={"sub": user.username})
+    return user

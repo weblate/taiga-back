@@ -23,8 +23,9 @@ class Settings(BaseSettings):
     ADMINS: Tuple[Tuple[str, EmailStr], ...]
     # Auth
     SECRET_KEY: str = "app_secret"
-    ALGORITHM: str = "HS256"
-    ACCESS_TOKEN_EXPIRE_MINUTES: int = 30
+    CRYPT_SCHEMES: List[str] = ["bcrypt", "django_pbkdf2_sha256"]
+    JWT_ALGORITHM: str = "HS256"
+    JWT_TOKEN_EXPIRED_MINUTES: int = 30
     # CORS
     CORS_ORIGINS: List[str] = ["*"]
 

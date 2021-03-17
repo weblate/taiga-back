@@ -16,19 +16,17 @@
 
 from typing import Optional
 
+from fastapi.security import OAuth2PasswordRequestForm as FastApiOAuth2PasswordRequestForm
 from pydantic import BaseModel
 
 
 ## AUTH
 
-class TokenSchema(BaseModel):
+class OAuth2PasswordRequestForm(FastApiOAuth2PasswordRequestForm): ...
+
+class AccessTokenSchema(BaseModel):
     access_token: str
     token_type: str
-
-
-class TokenDataSchema(BaseModel):
-    username: Optional[str] = None
-
 
 
 ### USER
@@ -38,7 +36,11 @@ class UserBaseSchema(BaseModel):
     full_name: Optional[str] = None
 
 
-class UserMeSchema(User):
+class UserMeSchema(UserBaseSchema):
     email: Optional[str] = None
-    is_active: Optional[bool] = None
-    hashed_password: str
+
+    class Config:
+        orm_mode = True
+
+
+class LoginSchema(AccessTokenSchema, UserMeSchema): ...

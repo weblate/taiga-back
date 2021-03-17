@@ -33,13 +33,11 @@ from starlette.applications import Starlette
 from starlette.middleware.wsgi import WSGIMiddleware
 from starlette.staticfiles import StaticFiles
 
-
-
 from taiga.wsgi import application as django_app
 from taiga_next.main import api
 
 
-app = Starlette()
+app = Starlette(debug=True)
 
 # Mount the new api
 app.mount("/api/v2/", app=api)

@@ -62,6 +62,8 @@ python-dotenv==0.15.0
     #   uvicorn
 python-jose[cryptography]==3.2.0
     # via -r requirements-next.in
+python-multipart==0.0.5
+    # via -r requirements-next.in
 pytz==2021.1
     # via django
 pyyaml==5.4.1
@@ -75,6 +77,7 @@ six==1.15.0
     #   bcrypt
     #   ecdsa
     #   python-jose
+    #   python-multipart
 sqlparse==0.4.1
     # via django
 starlette==0.13.6

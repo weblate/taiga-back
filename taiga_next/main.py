@@ -21,11 +21,13 @@ from taiga_next import __title__, __description__, __version__
 from taiga_next.conf import settings
 from taiga_next.routers import router, tags_metadata
 
+
 api = FastAPI(
     title=__title__,
     description=__description__,
     version=__version__,
-    openapi_tags=tags_metadata
+    openapi_tags=tags_metadata,
+    debug=True
 )
 
 
