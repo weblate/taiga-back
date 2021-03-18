@@ -27,7 +27,7 @@ api = FastAPI(
     description=__description__,
     version=__version__,
     openapi_tags=tags_metadata,
-    debug=True
+    debug=settings.DEBUG_MODE
 )
 
 
@@ -39,5 +39,6 @@ api.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
 
 api.include_router(router)

@@ -26,7 +26,11 @@ You can run this with uvicorn or gunicorn:
     DJANGO_SETTINGS_MODULE=settings.config uvicorn taiga_next.wsgi:app --reload
 
 """
+
+import logging
 import os, sys
+
+# NOTE: This is to import taiga and Taiga_next
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.realpath(__file__))))
 
 from starlette.applications import Starlette
@@ -35,9 +39,15 @@ from starlette.staticfiles import StaticFiles
 
 from taiga.wsgi import application as django_app
 from taiga_next.main import api
+from taiga_next.conf import settings
 
+# NOTE: This is to get logging (fix conflict with django logging)
+logging.config.dictConfig({
+    'version': 1,
+    'disable_existing_loggers': False,
+})
 
-app = Starlette(debug=True)
+app = Starlette(debug=settings.DEBUG_MODE)
 
 # Mount the new api
 app.mount("/api/v2/", app=api)

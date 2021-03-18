@@ -21,6 +21,7 @@ from pydantic import BaseSettings, EmailStr
 
 class Settings(BaseSettings):
     ADMINS: Tuple[Tuple[str, EmailStr], ...]
+    DEBUG_MODE: bool = True
     # Auth
     SECRET_KEY: str = "app_secret"
     CRYPT_SCHEMES: List[str] = ["bcrypt", "django_pbkdf2_sha256"]

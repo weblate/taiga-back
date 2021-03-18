@@ -33,7 +33,7 @@ cmd = typer.Typer()
 
 
 @cmd.command()
-def runserve(
+def runserver(
     host: str = typer.Option("0.0.0.0", help="Host to serve the app."),
     port: int = typer.Option(8000, help="Port to serve the app."),
     reload: bool = typer.Option(True, help="Reload after some change in the source code happens."),
@@ -42,7 +42,6 @@ def runserve(
         app = wsgi_app_name
     else:
         app = wsgi_app
-        app.debug = debug
 
     kwargs = {
         "host": host,
@@ -55,15 +54,13 @@ def runserve(
     config = Config(app, **kwargs)
     server = Server(config=config)
 
-
-    typer.secho(f">> Running on {host}:{port}", bold=True)
     if config.should_reload:
-        typer.secho(f">> Reload mode is ON", bold=True)
         sock = config.bind_socket()
         supervisor = ChangeReload(config, target=server.run, sockets=[sock])
         supervisor.run()
     else:
         server.run()
+
 
 if __name__ == "__main__":
     os.environ.setdefault("DJANGO_SETTINGS_MODULE", "settings.common")
