@@ -27,7 +27,10 @@ metadata = {
     "description": "Endpoint with actions over projects.",
 }
 
-router = APIRouter()
+router = APIRouter(
+    prefix="/projects",
+    tags=["projects"]
+)
 
 @router.get(
     "/",

@@ -27,7 +27,10 @@ metadata = {
     "description": "Endpoint with actions related to authentication process.",
 }
 
-router = APIRouter()
+router = APIRouter(
+    prefix="/auth",
+    tags=["auth"]
+)
 
 
 @router.post(

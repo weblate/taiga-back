@@ -22,8 +22,8 @@ from taiga_next.userstories import api as userstories_api
 
 
 router = APIRouter()
-router.include_router(auth_api.router, prefix="/auth", tags=["auth"])
-router.include_router(projects_api.router, prefix="/projects", tags=["projects"])
+router.include_router(auth_api.router)
+router.include_router(projects_api.router)
 router.include_router(userstories_api.router, prefix="/userstories", tags=["userstories"])
 
 tags_metadata = [
