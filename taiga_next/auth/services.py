@@ -24,6 +24,7 @@ from passlib.context import CryptContext
 
 from taiga_next.conf import settings
 
+from .models import User
 from . import exceptions as exp
 from . import repositories
 
@@ -67,10 +68,10 @@ def authenticate_user(username_or_email: str, password: str):
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 
 
-def get_current_user(token: str = Depends(oauth2_scheme)):
+def get_user_by_token(token: str = Depends(oauth2_scheme)):
     # Get payload
     try:
-        payload = jwt.decode(token, settings.SECRET_KEY, algorithms=[settings.JWT_ALGORITHMS])
+        payload = jwt.decode(token, settings.SECRET_KEY, algorithms=[settings.JWT_ALGORITHM])
     except JWTError:
         raise exp.invalid_credentials
 
@@ -82,8 +83,15 @@ def get_current_user(token: str = Depends(oauth2_scheme)):
     if user is None:
         raise exp.invalid_credentials
 
+    return user
+
+
+async def get_current_user(user: User = Depends(get_user_by_token)):
     # Check if is active
     if not user.is_active:
         raise exp.inactive_user
 
-    return current_user
+    return user
+
+
+is_auth_required = Depends(get_current_user)
