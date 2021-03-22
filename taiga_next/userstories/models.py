@@ -14,20 +14,4 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from fastapi import APIRouter
-
-from taiga_next.auth import api as auth_api
-from taiga_next.projects import api as projects_api
-from taiga_next.userstories import api as userstories_api
-
-
-router = APIRouter()
-router.include_router(auth_api.router, prefix="/auth", tags=["auth"])
-router.include_router(projects_api.router, prefix="/projects", tags=["projects"])
-router.include_router(userstories_api.router, prefix="/userstories", tags=["userstories"])
-
-tags_metadata = [
-    auth_api.metadata,
-    projects_api.metadata,
-    userstories_api.metadata,
-]
+from taiga.projects.userstories.models import UserStory   # pylint: disable=unused-import

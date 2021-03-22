@@ -14,20 +14,27 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from fastapi import APIRouter
+from typing import Iterable, Union
 
-from taiga_next.auth import api as auth_api
-from taiga_next.projects import api as projects_api
-from taiga_next.userstories import api as userstories_api
+from .models import UserStory
+
+from taiga.projects.userstories.utils import attach_extra_info
 
 
-router = APIRouter()
-router.include_router(auth_api.router, prefix="/auth", tags=["auth"])
-router.include_router(projects_api.router, prefix="/projects", tags=["projects"])
-router.include_router(userstories_api.router, prefix="/userstories", tags=["userstories"])
+def get_userstory(id: int) -> Union[UserStory, None]:
+    try:
+        return UserStory.objects.get(id=id)
+    except UserStory.DoesNotExist:
+        return None
 
-tags_metadata = [
-    auth_api.metadata,
-    projects_api.metadata,
-    userstories_api.metadata,
-]
+
+def get_userstories(offset: int, limit: int) -> Iterable[UserStory]:
+        qs = UserStory.objects.all()[offset:offset+limit]
+        qs = qs.select_related("project",
+                               "status",
+                               "assigned_to",
+                               "owner")
+
+        qs = attach_extra_info(qs, include_tasks=True)
+
+        return qs
