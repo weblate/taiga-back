@@ -19,51 +19,37 @@ from typing import List, Optional
 
 from pydantic import BaseModel
 
-from taiga_next.auth.schemas import UserBaseSchema
-from taiga_next.projects.schemas import ProjectSchema
-from taiga_next.tasks.schemas import TaskBaseSchema
-from taiga_next.epics.schemas import EpicSchema
-
-
-class UserStoryBaseSchema(BaseModel):
+class TaskBaseSchema(BaseModel):
     id: int
-    version: int
-    created_date: datetime
-    modified_date: datetime
+    is_blocked: bool
+    is_iocaine: bool
+    ref: Optional[int]
+    status_id: Optional[int]
     subject: str
-    owner_id: int
-    project_id: int
 
     class Config:
         orm_mode = True
 
 
-class UserStorySchema(UserStoryBaseSchema):
-    tags: List[str]
-    is_blocked: bool
+class TaskSchema(TaskBaseSchema):
+    tags: Optional[List[str]]
+    version: int
     blocked_note: str
-    ref: int
-    is_closed: bool
-    backlog_order: str
-    finish_date: Optional[datetime]
+    created_date: datetime
+    modified_date: datetime
+    finished_date: Optional[datetime]
     description: str
-    client_requirement: bool
-    team_requirement: bool
     assigned_to_id: Optional[int]
-    generated_from_issue_id: Optional[int]
     milestone_id: Optional[int]
+    owner_id: int
+    project_id: int
     status_id: int
-    sprint_order: int
-    kanban_order: int
-    external_reference: Optional[str]
-    tribe_gig: Optional[str]
-    due_date: Optional[str]
-    due_date_reason: Optional[str]
-    generated_from_task_id: Optional[int]
-    from_task_ref: Optional[str]
-    swimlane_id: Optional[int]
-    """ epics: Optional[List[EpicSchema]] """
-    """ tasks: Optional[List[TaskBaseSchema]] """
+    user_story_id: int
+    taskboard_order: int
+    us_order: int
+    external_reference: Optional[List[str]]
+    due_date: Optional[datetime]
+    due_date_reason: str
 
     class Config:
         orm_mode = True
