@@ -29,12 +29,16 @@ def get_userstory(id: int) -> Union[UserStory, None]:
 
 
 def get_userstories(offset: int, limit: int) -> Iterable[UserStory]:
-        qs = UserStory.objects.all()[offset:offset+limit]
+        qs = UserStory.objects.all()
         qs = qs.select_related("project",
                                "status",
                                "assigned_to",
-                               "owner")
+                               "owner",
+                               "generated_from_issue",
+                               "generated_from_task")
+
+        qs = qs.prefetch_related("assigned_users")
 
         qs = attach_extra_info(qs, include_tasks=True)
 
-        return qs
+        return qs[offset:offset+limit]

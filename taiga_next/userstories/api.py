@@ -27,7 +27,7 @@ metadata = {
     "description": "Endpoint with actions over userstories.",
 }
 
-router = APIRouter()
+router = APIRouter(prefix="/userstories", tags=["userstories"])
 
 @router.get(
     "/",
