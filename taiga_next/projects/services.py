@@ -14,16 +14,17 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from typing import Union
+from typing import Optional, Union
 
 from . import repositories
+from .models import Project
 
 
-def get_project(identifier: Union[int, str]):
+def get_project(identifier: Union[int, str]) -> Optional[Project]:
     if isinstance(identifier, int):
         return repositories.get_project(identifier)
     return repositories.get_project_by_slug(identifier)
 
 
-def get_projects(offset: int = 0, limit: int = 100):
+def get_projects(offset: int = 0, limit: int = 100) -> list[Project]:
     return list(repositories.get_projects(offset, limit))

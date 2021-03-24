@@ -14,19 +14,19 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from typing import Iterable, Union
+from typing import Iterable, Optional
 
 from .models import Project
 
 
-def get_project(id: int) -> Union[Project, None]:
+def get_project(id: int) -> Optional[Project]:
     try:
         return Project.objects.get(id=id)
     except Project.DoesNotExist:
         return None
 
 
-def get_project_by_slug(slug: str) -> Union[Project, None]:
+def get_project_by_slug(slug: str) ->  Optional[Project]:
     try:
         return Project.objects.get(slug=slug)
     except Project.DoesNotExist:

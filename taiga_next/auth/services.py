@@ -15,7 +15,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 from datetime import datetime, timedelta
-from typing import Optional
+from typing import Any, Optional
 
 from fastapi import Depends
 from fastapi.security import OAuth2PasswordBearer
@@ -34,15 +34,15 @@ from . import repositories
 pwd_context = CryptContext(schemes=settings.CRYPT_SCHEMES, deprecated="auto")
 
 
-def verify_password(plain_password, hashed_password):
+def verify_password(plain_password, hashed_password) -> bool:
     return pwd_context.verify(plain_password, hashed_password)
 
 
-def get_password_hash(password):
+def get_password_hash(password) -> str:
     return pwd_context.hash(password)
 
 
-def create_access_token(data: dict, expires_delta: Optional[timedelta] = None):
+def create_access_token(data: dict[str, Any], expires_delta: Optional[timedelta] = None) -> str:
     to_encode = data.copy()
 
     if expires_delta:
@@ -56,7 +56,7 @@ def create_access_token(data: dict, expires_delta: Optional[timedelta] = None):
 
 # User
 
-def authenticate_user(username_or_email: str, password: str):
+def authenticate_user(username_or_email: str, password: str) -> Union[User, False]:
     user = repositories.get_user_by_username_or_email(username_or_email, extra_filters={"is_active": True})
     if not user:
         return False
@@ -68,7 +68,7 @@ def authenticate_user(username_or_email: str, password: str):
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 
 
-def get_user_by_token(token: str = Depends(oauth2_scheme)):
+def get_user_by_token(token: str = Depends(oauth2_scheme)) -> Optional[User]:
     # Get payload
     try:
         payload = jwt.decode(token, settings.SECRET_KEY, algorithms=[settings.JWT_ALGORITHM])
@@ -86,7 +86,7 @@ def get_user_by_token(token: str = Depends(oauth2_scheme)):
     return user
 
 
-async def get_current_user(user: User = Depends(get_user_by_token)):
+async def get_current_user(user: User = Depends(get_user_by_token)) -> Optional[User]:
     # Check if is active
     if not user.is_active:
         raise exp.inactive_user

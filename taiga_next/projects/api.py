@@ -13,7 +13,7 @@
 #
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
-from typing import Iterable, List, Union
+from typing import Union
 
 from fastapi import APIRouter, HTTPException, Query
 
@@ -36,12 +36,12 @@ router = APIRouter(
     "/",
     name="projects.list",
     summary="List projects",
-    response_model=List[ProjectSchema]
+    response_model=list[ProjectSchema]
 )
 def list_projects(
     offset: int = Query(0, description="number of projects to skip"),
     limit: int = Query(100, description="number of projects to show")
-):
+) -> list[Project]:
     """
     Get a paginated list of visible projects.
     """
@@ -55,7 +55,7 @@ def list_projects(
 )
 def get_project(
     project_id_or_slug: Union[int, str] = Query(None, description="the project id (integer) or the project slug (string)")
-):
+) -> Project:
     """
     Get project detail by id or slug.
     """

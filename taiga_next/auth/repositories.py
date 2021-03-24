@@ -14,14 +14,14 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from typing import Union
+from typing import Any, Optional, Union
 
 from django.db.models import Q
 
 from .models import User
 
 
-def get_user_by_username_or_email(username_or_email: str, extra_filters: dict = {}) ->  Union[User, None]:
+def get_user_by_username_or_email(username_or_email: str, extra_filters: dict[str, Any] = {}) ->  Optional[User]:
     qs = User.objects.filter(Q(username__iexact=username_or_email) |
                              Q(email__iexact=username_or_email),
                              **extra_filters)
