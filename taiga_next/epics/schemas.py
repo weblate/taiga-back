@@ -18,12 +18,13 @@ from datetime import datetime
 from typing import List, Optional
 
 from pydantic import BaseModel
+from taiga_next.projects.schemas import ProjectBaseSchema
 
 
 class EpicSchema(BaseModel):
     id: int
     color: str
-    project_id: int
+    project: ProjectBaseSchema
     ref: Optional[int]
     subject: str
 

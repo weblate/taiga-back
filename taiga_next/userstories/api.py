@@ -37,7 +37,7 @@ router = APIRouter(prefix="/userstories", tags=["userstories"])
 )
 def list_userstories(
     offset: int = Query(0, description="number of userstories to skip"),
-    limit: int = Query(100, description="number of userstories to show")
+    limit: int = Query(1000, description="number of userstories to show")
 ):
     """
     Get a paginated list of visible userstories.

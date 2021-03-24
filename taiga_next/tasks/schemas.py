@@ -22,6 +22,7 @@ from pydantic import BaseModel
 class TaskBaseSchema(BaseModel):
     id: int
     is_blocked: bool
+    is_closed: bool
     is_iocaine: bool
     ref: Optional[int]
     status_id: Optional[int]

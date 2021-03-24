@@ -15,12 +15,12 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 from datetime import datetime
-from typing import List, Optional
+from typing import Any, Dict, List, Optional
 
 from pydantic import BaseModel
 
 from taiga_next.auth.schemas import UserBaseSchema
-from taiga_next.projects.schemas import ProjectSchema
+from taiga_next.projects.schemas import ProjectBaseSchema
 from taiga_next.tasks.schemas import TaskBaseSchema
 from taiga_next.epics.schemas import EpicSchema
 
@@ -37,7 +37,6 @@ class UserStoryBaseSchema(BaseModel):
     class Config:
         orm_mode = True
 
-
 class UserStorySchema(UserStoryBaseSchema):
     tags: List[str]
     is_blocked: bool
@@ -50,6 +49,9 @@ class UserStorySchema(UserStoryBaseSchema):
     client_requirement: bool
     team_requirement: bool
     assigned_to_id: Optional[int]
+    assigned_to_extra_info: Optional[UserBaseSchema]
+    owner_extra_info: Optional[UserBaseSchema]
+    project_extra_info: Optional[ProjectBaseSchema]
     generated_from_issue_id: Optional[int]
     milestone_id: Optional[int]
     status_id: int
@@ -62,8 +64,12 @@ class UserStorySchema(UserStoryBaseSchema):
     generated_from_task_id: Optional[int]
     from_task_ref: Optional[str]
     swimlane_id: Optional[int]
-    """ epics: Optional[List[EpicSchema]] """
-    """ tasks: Optional[List[TaskBaseSchema]] """
+    epics_attr: Optional[List[EpicSchema]]
+    tasks_attr: Optional[List[TaskBaseSchema]]
+    total_points_attr: Optional[int]
+    role_points_attr: Optional[Dict]
+    assigned_users_attr: Optional[List[int]]
 
     class Config:
         orm_mode = True
+
