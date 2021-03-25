@@ -67,8 +67,15 @@ class UserStorySchema(UserStoryBaseSchema):
     epics_attr: Optional[List[EpicSchema]]
     tasks_attr: Optional[List[TaskBaseSchema]]
     total_points_attr: Optional[int]
-    role_points_attr: Optional[Dict]
+    role_points_attr: Optional[Any]
     assigned_users_attr: Optional[List[int]]
+    watchers: Optional[Any]
+    total_voters: Optional[int]
+    total_watchers: Optional[int]
+    is_voter: bool
+    is_watcher: bool
+    comment: Optional[str]
+    total_comments: Optional[int]
 
     class Config:
         orm_mode = True
