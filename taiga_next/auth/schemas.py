@@ -32,8 +32,13 @@ class AccessTokenSchema(BaseModel):
 ### USER
 
 class UserBaseSchema(BaseModel):
+    id: int
     username: str
     full_name: Optional[str] = None
+    is_active: bool
+
+    class Config:
+        orm_mode = True
 
 
 class UserMeSchema(UserBaseSchema):

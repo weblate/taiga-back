@@ -32,13 +32,6 @@ class EpicSchema(BaseModel):
         orm_mode = True
 
 
-""" class EpicSchema(EpicBase):
-    user_stories: Optional[List[UserStoryBase]]
-
-    class Config:
-        orm_mode = True """
-
-
 class EpicsRelateduserstorySchema(BaseModel):
     id: int
     order: int

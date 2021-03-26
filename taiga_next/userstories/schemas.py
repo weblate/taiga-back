@@ -31,8 +31,8 @@ class UserStoryBaseSchema(BaseModel):
     created_date: datetime
     modified_date: datetime
     subject: str
-    owner_id: int
-    project_id: int
+    owner: UserBaseSchema
+    project: ProjectBaseSchema
 
     class Config:
         orm_mode = True
@@ -48,10 +48,7 @@ class UserStorySchema(UserStoryBaseSchema):
     description: str
     client_requirement: bool
     team_requirement: bool
-    assigned_to_id: Optional[int]
-    assigned_to_extra_info: Optional[UserBaseSchema]
-    owner_extra_info: Optional[UserBaseSchema]
-    project_extra_info: Optional[ProjectBaseSchema]
+    assigned_to: Optional[UserBaseSchema]
     generated_from_issue_id: Optional[int]
     milestone_id: Optional[int]
     status_id: int

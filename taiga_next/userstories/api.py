@@ -21,6 +21,8 @@ from . import services
 from .models import UserStory
 from .schemas import UserStorySchema
 
+from fastapi.responses import UJSONResponse
+
 
 metadata = {
     "name": "userstories",
@@ -33,7 +35,8 @@ router = APIRouter(prefix="/userstories", tags=["userstories"])
     "/",
     name="userstories.list",
     summary="List userstories",
-    response_model=List[UserStorySchema]
+    response_model=List[UserStorySchema],
+    response_class=UJSONResponse
 )
 def list_userstories(
     offset: int = Query(0, description="number of userstories to skip"),
