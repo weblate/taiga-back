@@ -15,7 +15,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 from datetime import datetime, timedelta
-from typing import Any, Optional
+from typing import Any, Optional, Union
 
 from fastapi import Depends
 from fastapi.security import OAuth2PasswordBearer
@@ -56,7 +56,7 @@ def create_access_token(data: dict[str, Any], expires_delta: Optional[timedelta]
 
 # User
 
-def authenticate_user(username_or_email: str, password: str) -> Union[User, False]:
+def authenticate_user(username_or_email: str, password: str) -> Union[User, bool]:
     user = repositories.get_user_by_username_or_email(username_or_email, extra_filters={"is_active": True})
     if not user:
         return False
