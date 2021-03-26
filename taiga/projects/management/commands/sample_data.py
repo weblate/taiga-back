@@ -110,7 +110,7 @@ WIP_LIMITS_CHOICES = (
 BASE_USERS = getattr(settings, "SAMPLE_DATA_BASE_USERS", {})
 NUM_USERS = getattr(settings, "SAMPLE_DATA_NUM_USERS", 10)
 NUM_INVITATIONS =getattr(settings, "SAMPLE_DATA_NUM_INVITATIONS",  2)
-NUM_PROJECTS =getattr(settings, "SAMPLE_DATA_NUM_PROJECTS",  4)
+NUM_PROJECTS =getattr(settings, "SAMPLE_DATA_NUM_PROJECTS",  1)
 NUM_EMPTY_PROJECTS = getattr(settings, "SAMPLE_DATA_NUM_EMPTY_PROJECTS", 2)
 NUM_BLOCKED_PROJECTS = getattr(settings, "SAMPLE_DATA_NUM_BLOCKED_PROJECTS", 1)
 NUM_MILESTONES = getattr(settings, "SAMPLE_DATA_NUM_MILESTONES", (1, 5))
@@ -119,7 +119,7 @@ NUM_USS_EPICS = getattr(settings, "SAMPLE_DATA_NUM_USS_EPICS", (2, 12))
 NUM_USS = getattr(settings, "SAMPLE_DATA_NUM_USS", (3, 7))
 NUM_TASKS_FINISHED = getattr(settings, "SAMPLE_DATA_NUM_TASKS_FINISHED", (1, 5))
 NUM_TASKS = getattr(settings, "SAMPLE_DATA_NUM_TASKS", (0, 4))
-NUM_USS_BACK = getattr(settings, "SAMPLE_DATA_NUM_USS_BACK", (8, 20))
+NUM_USS_BACK = getattr(settings, "SAMPLE_DATA_NUM_USS_BACK", (900, 1000))
 NUM_ISSUES = getattr(settings, "SAMPLE_DATA_NUM_ISSUES", (12, 25))
 NUM_WIKI_LINKS = getattr(settings, "SAMPLE_DATA_NUM_WIKI_LINKS", (0, 15))
 NUM_ATTACHMENTS = getattr(settings, "SAMPLE_DATA_NUM_ATTACHMENTS", (1, 4))
@@ -271,6 +271,11 @@ class Command(BaseCommand):
                 # created unassociated uss.
                 for y in range(self.sd.int(*NUM_USS_BACK)):
                     us = self.create_us(project, None, computable_project_roles)
+                    
+                    start_date = now() - datetime.timedelta(55)
+                    end_date = start_date + datetime.timedelta(15)
+                    for x in range(self.sd.int(*NUM_TASKS)):
+                        task = self.create_task(project, None, us, start_date, end_date)
 
                 # create bugs.
                 for y in range(self.sd.int(*NUM_ISSUES)):

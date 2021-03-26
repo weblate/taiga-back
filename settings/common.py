@@ -489,7 +489,7 @@ REST_FRAMEWORK = {
     "DEFAULT_THROTTLE_WHITELIST": [],
     "FILTER_BACKEND": "taiga.base.filters.FilterBackend",
     "EXCEPTION_HANDLER": "taiga.base.exceptions.exception_handler",
-    "PAGINATE_BY": 30,
+    "PAGINATE_BY": 1000,
     "PAGINATE_BY_PARAM": "page_size",
     "MAX_PAGINATE_BY": 1000,
     "DATETIME_FORMAT": "%Y-%m-%dT%H:%M:%S%z"
